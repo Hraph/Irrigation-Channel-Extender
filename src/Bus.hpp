@@ -5,6 +5,8 @@
 #include <Wire.h>
 #include "Commands.hpp"
 #include "Singleton.hpp"
+#include "Master.hpp"
+#include "Slave.hpp"
 #define SLAVE_ADDRESS 0x79
 #define HAS_PARAMETER_MASK 0x8000
 

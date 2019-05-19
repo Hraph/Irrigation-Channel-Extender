@@ -96,7 +96,11 @@ namespace Communication {
         switch (command)
         {
         case App::Commands::REQUEST_Start:
-            
+            App::Slave::getInstance()->start(parameterValue);
+            break;
+
+        case App::Commands::REQUEST_Stop:
+            App::Slave::getInstance()->stop();
             break;
         
         default:
