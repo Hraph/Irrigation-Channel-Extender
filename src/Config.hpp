@@ -19,4 +19,5 @@
 #define SLAVE_CHANNEL_PIN_5 6
 #define SLAVE_CHANNEL_PIN_6 7
 
+#define INTERRUPT_THRESHOLD_DELAY 25
 #endif //Config.hpp

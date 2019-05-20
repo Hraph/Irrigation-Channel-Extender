@@ -3,6 +3,10 @@
 
 #ifdef SLAVE
 #define ICACHE_RAM_ATTR // No attribute for UNO Board
+class Ticker { // Arduino UNO has no Ticker library
+    public:
+    void attach_ms(int, void (&)());
+};
 #endif
 
 #include "IrrigationController.hpp"
@@ -10,6 +14,10 @@
 #include "Bus.hpp"
 #include "Config.hpp"
 #include <Arduino.h>
+
+#ifdef MASTER
+#include <Ticker.h>
+#endif // MASTER
 
 #pragma once
 
@@ -21,8 +29,10 @@ namespace App {
         void start(uint8_t channel);
         void stop();
         static void onInterrupt();
+        static void onTickerEnd();
         void processChangePinStatus();
         Master();
+        Ticker changedPinStatusTicker;
     };
 }
 

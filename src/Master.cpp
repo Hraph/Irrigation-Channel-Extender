@@ -44,8 +44,12 @@ namespace App {
 
 	void ICACHE_RAM_ATTR Master::onInterrupt(){
 		noInterrupts();
-		Master::getInstance()->processChangePinStatus();
+		Master::getInstance()->changedPinStatusTicker.attach_ms(INTERRUPT_THRESHOLD_DELAY, Master::onTickerEnd);
 		interrupts();
+	}
+
+	void Master::onTickerEnd(){
+		Master::getInstance()->processChangePinStatus();
 	}
 
 	void Master::processChangePinStatus(){
