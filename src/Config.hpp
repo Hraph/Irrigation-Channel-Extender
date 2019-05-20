@@ -1,6 +1,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#define DEBUG true
+
 #define CHANNELS_COUNT 6
 
 #define MASTER_CHANNEL_PIN_1 0

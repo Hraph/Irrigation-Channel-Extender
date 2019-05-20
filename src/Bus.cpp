@@ -2,9 +2,6 @@
 
 namespace Communication {
 	void Bus::slaveOnReceive(int size){
-        Serial.print("Receiving ");
-        Serial.print(size);
-        Serial.println(" bytes"); 
         bool nextIsHigherByte = true; // First receive is higher
         bool nextReceiveIsParameter = false;
         App::Commands latestReceivedCommand;
@@ -48,7 +45,7 @@ namespace Communication {
         #endif // DEBUG
     }
 
-    void Bus::sendCommand(App::Commands command, bool hasParameter, short parameterValue){
+    bool Bus::sendCommand(App::Commands command, bool hasParameter, short parameterValue){
         Wire.beginTransmission(SLAVE_ADDRESS); // Transmit to device
 
         int cmd = command;
@@ -63,8 +60,15 @@ namespace Communication {
             Wire.write(parameterValue & 0xFF); // Send lower
         }
         
-        Wire.endTransmission();
-        Serial.println("Sending command");
+		#ifdef DEBUG
+				Serial.println("Sending command");
+		#endif // DEBUG
+
+        char wireStatus = Wire.endTransmission();
+
+		// TODO handle errors
+
+		return (wireStatus == 0);
     }
 
     #ifdef MASTER
@@ -82,16 +86,17 @@ namespace Communication {
             break;
         }
     }
-    #endif // DEBUG
+    #endif // MASTER
 
-    //#define SLAVE
     #ifdef SLAVE
     void Bus::processSlaveReceivedCommand(App::Commands command, bool hasParameter, short parameterValue){
-        Serial.print("Received command: ");
-        Serial.println((App::Commands) command);
+		#ifdef DEBUG
+		Serial.print("Received command: ");
+		Serial.print((App::Commands) command);
 
-        Serial.print("With parameter: ");
-        Serial.println(parameterValue);
+		Serial.print(" - with parameter: ");
+		Serial.println(parameterValue);
+		#endif // DEBUG
 
         switch (command)
         {
@@ -102,10 +107,7 @@ namespace Communication {
         case App::Commands::REQUEST_Stop:
             App::Slave::getInstance()->stop();
             break;
-        
-        default:
-            break;
         }
     }
-    #endif // DEBUG
+    #endif // SLAVE
 }

@@ -1,6 +1,4 @@
 #include <Arduino.h>
-#include "Bus.hpp"
-#include "Commands.hpp"
 #include "Config.hpp"
 #include "Master.hpp"
 #include "Slave.hpp"
@@ -16,9 +14,11 @@ uint8_t channels[] = {SLAVE_CHANNEL_PIN_1, SLAVE_CHANNEL_PIN_2, SLAVE_CHANNEL_PI
 #endif // SLAVE
 
 void setup() {
+	#ifdef DEBUG
 	Serial.begin(9600);
 	Serial.println("Starting");
-	
+	#endif // DEBUG
+
 	#ifdef MASTER
 	master = App::Master::getInstance();
 	master->initialize(channels);
@@ -28,7 +28,6 @@ void setup() {
 	slave = App::Slave::getInstance();
 	slave->initialize(channels);
 	#endif // SLAVE
-
 }
 
 void debugPinState(uint8_t pins[], int delayMs){

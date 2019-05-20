@@ -11,18 +11,27 @@ namespace App {
 	}
 
 	void Slave::start(uint8_t channel) {
-		if (currentChannelState) { // A channel is currently active
+		if (currentChannelState && channel != currentChannel) { // A different channel is currently active
 			stop();
 		}
+		
+		#ifdef DEBUG
+		Serial.print("Start: ");
+		Serial.println(channel);
+		#endif // DEBUG
 
 		digitalWrite(channel, HIGH);
 
-		// If no error
 		currentChannel = channel;
 		currentChannelState = true;
 	}
 
 	void Slave::stop() {
+		#ifdef DEBUG
+		Serial.print("Stop: ");
+		Serial.println(currentChannel);
+		#endif // DEBUG
+			
 		digitalWrite(currentChannel, LOW);
 		currentChannelState = false;
 	}
