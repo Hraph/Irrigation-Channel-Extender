@@ -36,7 +36,7 @@ namespace Communication {
 
     void Bus::initialize() {
         #ifdef MASTER
-        Wire.begin(); // join i2c bus (address optional for master)
+        Wire.begin(MASTER_SDA_PIN, MASTER_SCL_PIN); // join i2c bus (address optional for master)
         #endif // DEBUG
 
         #ifdef SLAVE
