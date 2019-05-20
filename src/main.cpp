@@ -31,6 +31,7 @@ void setup() {
 }
 
 void debugPinState(uint8_t pins[], int delayMs){
+	Serial.println();
 	for (uint8_t i = 0; i < CHANNELS_COUNT; ++i)
 		{
 			Serial.print(digitalRead(pins[i]) == PULLUP_HIGH, 2);

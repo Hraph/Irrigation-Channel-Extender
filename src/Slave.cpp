@@ -10,19 +10,21 @@ namespace App {
 		initializePins(channelsPins, CHANNELS_COUNT, OUTPUT);
 	}
 
-	void Slave::start(uint8_t channel) {
-		if (currentChannelState && channel != currentChannel) { // A different channel is currently active
+	void Slave::start(uint8_t channelId) {
+		if (currentChannelState && channels[channelId] != currentChannel) { // A different channel is currently active
 			stop();
 		}
 		
 		#ifdef DEBUG
 		Serial.print("Start: ");
-		Serial.println(channel);
+		Serial.print(channelId);
+		Serial.print(" on pin ");
+		Serial.println(channels[channelId]);
 		#endif // DEBUG
 
-		digitalWrite(channel, HIGH);
+		digitalWrite(channels[channelId], HIGH);
 
-		currentChannel = channel;
+		currentChannel = channels[channelId];
 		currentChannelState = true;
 	}
 

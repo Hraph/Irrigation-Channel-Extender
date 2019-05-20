@@ -15,20 +15,21 @@ namespace App {
 		processChangePinStatus(); // Initial check
 	}
 
-    void Master::start(uint8_t channel) {
-			if (currentChannelState && channel != currentChannel) { // A different channel is currently active
-				stop();
-			}
-			
-			#ifdef DEBUG
-			Serial.print("Start: ");
-			Serial.println(channel);
-			#endif // DEBUG
-			
-			if (Communication::Bus::getInstance()->sendCommand(App::Commands::REQUEST_Start, true, channel)) { // If no error
-				currentChannel = channel;
-				currentChannelState = true;
-			}
+    void Master::start(uint8_t channelId) {
+		if (channels[channelId] == currentChannel && currentChannelState) // No need to send
+			return;
+
+		#ifdef DEBUG
+		Serial.print("Start: ");
+		Serial.print(channelId);
+		Serial.print(" on pin ");
+		Serial.println(channels[channelId]);
+		#endif // DEBUG
+		
+		if (Communication::Bus::getInstance()->sendCommand(App::Commands::REQUEST_Start, true, channelId)) { // If no error
+			currentChannel = channels[channelId];
+			currentChannelState = true;
+		}
     }
 
     void Master::stop() {
@@ -54,10 +55,10 @@ namespace App {
 				stop();
 			}
 			else if (currentChannel == channels[i] && !currentChannelState && digitalRead(channels[i]) == PULLUP_HIGH) { // Same channel changed: The currentChannel is now high
-				start(channels[i]);
+				start(i);
 			}
 			else if (currentChannel != channels[i] && digitalRead(channels[i]) == PULLUP_HIGH && digitalRead(currentChannel) == PULLUP_LOW){ // Channel changed: Old channel low and new channel activated
-				start(channels[i]);
+				start(i);
 			}
 		}
 	}

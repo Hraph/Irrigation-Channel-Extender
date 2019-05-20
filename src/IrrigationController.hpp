@@ -13,7 +13,7 @@ namespace App {
     class IrrigationController {
     public:
 			virtual void initialize(uint8_t channelsPins[]) = 0;
-		  virtual void start(uint8_t channel) = 0;
+		  virtual void start(uint8_t channelId) = 0;
       virtual void stop() = 0;
         
     protected:
